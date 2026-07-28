@@ -4,16 +4,17 @@ use crate::base::base_command::BaseCommand;
 use crate::base::cli_error::CliError;
 use crate::base::command_result::CommandResult;
 use crate::base::parsed_command::ParsedCommand;
+use crate::workspace::initializer::WorkspaceInitializer;
 
 pub struct InitCommand {
-
     pub workspace_name : String,
     pub path: Option<PathBuf>
 }
 
 impl BaseCommand for InitCommand {
     fn execute(&self) -> Result<CommandResult, CliError> {
-        todo!()
+        let workspace_initializer = WorkspaceInitializer::new(self.workspace_name.clone(), self.path.clone());
+        return workspace_initializer.initialize();
     }
 
     fn create_executable_cmd(parsed_command: ParsedCommand, ) -> Result<Self, CliError> where Self: Sized,

@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 
 common = { path = "../common"}
+dirs = "6.0.0"

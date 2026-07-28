@@ -1,4 +1,4 @@
-pub mod init;
+pub mod init_workspace;
 mod dispatcher;
-mod parser;
-mod command_factory;
+pub mod parser;
+pub mod command_factory;

@@ -1,43 +1,38 @@
-use std::path::Path;
-use common::error::application_error::ApplicationError;
-use crate::base::command_result::CommandResult;
+use std::path::PathBuf;
 
-pub struct Initializer<'a>{
-    workspace_name: &'a str,
-    path: Option<&'a Path>,
+use crate::base::cli_error::CliError;
+use crate::base::command_result::CommandResult;
+use crate::workspace::directory::Directory;
+use super::resolver::WorkspaceResolver;
+use super::validator::WorkspaceValidator;
+
+pub struct WorkspaceInitializer {
+
+    workspace_name: String,
+
+    path: Option<PathBuf>,
+
 }
 
+impl WorkspaceInitializer {
 
-impl<'a> Initializer<'a>{
-
-    pub fn exist(&self) -> bool{
-        return self.path.unwrap().exists();
+    pub fn new( workspace_name: String, path: Option<PathBuf>) -> Self {
+        Self {workspace_name, path}
     }
 
-    pub fn init(&self) -> Result<CommandResult, ApplicationError>{
-        if self.exist(){
-            ApplicationError::new ( format!(
-                "Workspace already exists at: {}",
-                self.path
-                    .as_ref()
-                    .map(|p| p.display().to_string())
-                    .unwrap_or_else(|| ".".to_string())
-            ));
-        }
+    pub fn initialize(&self,) -> Result<CommandResult, CliError> {
+        let workspace = WorkspaceResolver::resolve(&self.workspace_name,self.path.as_ref())?;
+        WorkspaceValidator::validate(&workspace)?;
+        Directory::create(&workspace)?;
+        Ok(
+            CommandResult{
+                success:true,
+                exit_code: 0,
+                message: format!(
+                "Workspace initialized at {}", workspace.root().display()
+                ),
+            })
 
-        // few other command
-        Ok(CommandResult{
-            success: true,
-            exit_code: 0,
-            message: format!(
-                "Workspace has been successfully initialized at: {}",
-                self.path
-                    .as_ref()
-                    .map(|p| p.display().to_string())
-                    .unwrap_or_else(|| ".".to_string())
-            ),
-        })
     }
 
-    // other generic methods for workspace init
 }

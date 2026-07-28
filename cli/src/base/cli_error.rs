@@ -4,6 +4,7 @@ use std::fmt::{Display, Formatter};
 pub enum CliError {
     InvalidArguments(String),
     UnsupportedCommand(String),
+    UnexpectedError(String),
 }
 
 impl Display for CliError {
@@ -13,6 +14,7 @@ impl Display for CliError {
             CliError::UnsupportedCommand(cmd) => {
                 write!(f, "Unsupported command: {cmd}")
             }
+            CliError::UnexpectedError(msg) => write!(f, "{msg}"),
         }
     }
 }
