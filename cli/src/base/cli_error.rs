@@ -1,19 +1,19 @@
-use std::fmt;
+use std::fmt::{Display, Formatter};
 
-#[derive(Debug, Clone)]
-pub struct CliError {
-    pub exit_code: i32,
-    pub message: String,
+#[derive(Debug)]
+pub enum CliError {
+    InvalidArguments(String),
+    UnsupportedCommand(String),
 }
 
-impl fmt::Display for CliError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "Exit Code : {}\nMessage   : {}",
-            self.exit_code,
-            self.message
-        )
+impl Display for CliError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CliError::InvalidArguments(msg) => write!(f, "{msg}"),
+            CliError::UnsupportedCommand(cmd) => {
+                write!(f, "Unsupported command: {cmd}")
+            }
+        }
     }
 }
 
