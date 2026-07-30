@@ -52,4 +52,4 @@ impl FileManager {
     pub fn exists(path: impl AsRef<Path>) -> bool {
         LocalFileSystem::new().exists(path.as_ref())
     }
-
+}

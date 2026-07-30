@@ -1,2 +1,2 @@
 pub mod application_error;
-mod configuration_error;
+pub mod configuration_error;
