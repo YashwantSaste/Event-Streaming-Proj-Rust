@@ -18,5 +18,4 @@ impl ParsedCommand {
     pub fn has_option(&self, key: &str) -> bool {
         self.options.contains_key(key)
     }
-
 }

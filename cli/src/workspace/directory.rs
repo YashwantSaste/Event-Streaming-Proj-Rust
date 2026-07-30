@@ -1,15 +1,15 @@
-use std::fs;
-use common::filesystem::file_manager::FileManager;
 use common::constants::constants::*;
+use common::filesystem::file_manager::FileManager;
+
 use crate::base::cli_error::CliError;
 use crate::workspace::workspace::Workspace;
 
-
+/// Creates the directory layout for a workspace.
 pub struct Directory;
 
 impl Directory {
-
-    pub fn create(workspace: &Workspace) -> Result<(),CliError>{
+    /// Creates all directories required by a broker workspace.
+    pub fn create(workspace: &Workspace) -> Result<(), CliError> {
         let root = workspace.root();
 
         let directories = [
@@ -23,7 +23,7 @@ impl Directory {
             root.join(TEMP),
         ];
 
-        let result = FileManager::create_directories(directories);
-        result.map_err(|e| CliError::UnsupportedCommand(e.to_string()))
+        FileManager::create_directories(directories)
+            .map_err(|error| CliError::UnexpectedError(error.to_string()))
     }
 }

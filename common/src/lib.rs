@@ -2,6 +2,6 @@
 
 extern crate core;
 
+pub mod constants;
 pub mod error;
 pub mod filesystem;
-pub mod constants;

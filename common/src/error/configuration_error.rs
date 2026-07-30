@@ -4,7 +4,7 @@ use std::fmt::Formatter;
 
 #[derive(Clone, Debug)]
 pub struct ConfigurationError {
-    message: String
+    message: String,
 }
 
 impl ConfigurationError {

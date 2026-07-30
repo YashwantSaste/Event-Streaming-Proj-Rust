@@ -3,13 +3,12 @@ use crate::templates::template_generator::TemplateGenerator;
 use crate::workspace::workspace::Workspace;
 
 pub struct WorkspaceTemplateGenerator {
-    generators: Vec<Box<dyn TemplateGenerator>>
+    generators: Vec<Box<dyn TemplateGenerator>>,
 }
 
 impl WorkspaceTemplateGenerator {
-
     pub fn new(generators: Vec<Box<dyn TemplateGenerator>>) -> Self {
-        Self {generators}
+        Self { generators }
     }
 
     pub fn generate(&self, workspace: &Workspace) -> Result<(), CliError> {
@@ -18,5 +17,4 @@ impl WorkspaceTemplateGenerator {
         }
         Ok(())
     }
-
 }

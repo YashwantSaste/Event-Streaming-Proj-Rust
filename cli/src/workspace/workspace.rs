@@ -6,7 +6,6 @@ pub struct Workspace {
 }
 
 impl Workspace {
-
     pub fn new(root: PathBuf) -> Self {
         Self { root }
     }
@@ -14,5 +13,4 @@ impl Workspace {
     pub fn root(&self) -> &Path {
         &self.root
     }
-
 }

@@ -1,10 +1,10 @@
 use crate::command::command_factory::CommandFactory;
 use crate::command::parser::CommandParser;
 
-pub mod command;
 pub mod base;
-pub mod workspace;
+pub mod command;
 pub mod templates;
+pub mod workspace;
 
 fn main() {
     if let Err(error) = run() {

@@ -1,17 +1,16 @@
-use std::collections::HashMap;
 use crate::base::base_command::BaseCommand;
 use crate::base::cli_error::CliError;
 use crate::base::parsed_command::ParsedCommand;
+use std::collections::HashMap;
 
 pub struct CommandParser;
 
 impl CommandParser {
     pub fn parse() -> Result<ParsedCommand, CliError> {
-
         let args: Vec<String> = std::env::args().skip(1).collect();
 
         if args.is_empty() {
-            return Err(CliError::InvalidArguments("No command specified".into(),));
+            return Err(CliError::InvalidArguments("No command specified".into()));
         }
 
         let command = args[0].clone();
@@ -23,24 +22,21 @@ impl CommandParser {
             let current = &args[index];
             if current.starts_with("--") {
                 let key = current.trim_start_matches("--");
-                if index + 1 < args.len()
-                    && !args[index + 1].starts_with("--")
-                {
-                    options.insert(key.to_string(),args[index + 1].clone(), );
+                if index + 1 < args.len() && !args[index + 1].starts_with("--") {
+                    options.insert(key.to_string(), args[index + 1].clone());
                     index += 2;
                 } else {
-                    options.insert(key.to_string(), "true".to_string(),);
+                    options.insert(key.to_string(), "true".to_string());
                     index += 1;
                 }
             } else {
                 arguments.push(current.clone());
                 index += 1;
             }
-
         }
 
         Ok(ParsedCommand {
-            name:command,
+            name: command,
             arguments,
             options,
         })
