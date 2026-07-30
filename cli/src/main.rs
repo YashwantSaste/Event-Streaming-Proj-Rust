@@ -4,6 +4,7 @@ use crate::command::parser::CommandParser;
 pub mod command;
 pub mod base;
 pub mod workspace;
+pub mod templates;
 
 fn main() {
     if let Err(error) = run() {

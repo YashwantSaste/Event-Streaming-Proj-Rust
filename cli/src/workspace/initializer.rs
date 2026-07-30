@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use crate::base::cli_error::CliError;
 use crate::base::command_result::CommandResult;
+use crate::templates::workspace_template_generator::WorkspaceTemplateGenerator;
 use crate::workspace::directory::Directory;
 use super::resolver::WorkspaceResolver;
 use super::validator::WorkspaceValidator;
@@ -12,12 +13,15 @@ pub struct WorkspaceInitializer {
 
     path: Option<PathBuf>,
 
+    template_generator: WorkspaceTemplateGenerator,
+
+
 }
 
 impl WorkspaceInitializer {
 
-    pub fn new( workspace_name: String, path: Option<PathBuf>) -> Self {
-        Self {workspace_name, path}
+    pub fn new(workspace_name: String,path: Option<PathBuf>,template_generator: WorkspaceTemplateGenerator) -> Self {
+        Self {workspace_name, path,template_generator}
     }
 
     pub fn initialize(&self,) -> Result<CommandResult, CliError> {
