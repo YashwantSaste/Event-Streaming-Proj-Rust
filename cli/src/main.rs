@@ -1,4 +1,5 @@
 use crate::command::command_factory::CommandFactory;
+use crate::command::dispatcher::CommandDispatcher;
 use crate::command::parser::CommandParser;
 
 pub mod base;
@@ -16,7 +17,7 @@ fn main() {
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let parsed_command = CommandParser::parse()?;
     let command = CommandFactory::create(parsed_command)?;
-    let result = command.execute()?;
+    let result = CommandDispatcher::dispatch(command)?;
     println!("{}", result.message);
     Ok(())
 }

@@ -7,6 +7,9 @@ data_directory = "data/broker"
 topics_directory = "data/topics"
 segment_max_bytes = 1048576
 
+[network]
+max_frame_bytes = 1048576
+
 [logging]
 level = "info"
 file = "logs/broker.log"
