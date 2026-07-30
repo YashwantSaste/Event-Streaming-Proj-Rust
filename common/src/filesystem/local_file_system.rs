@@ -1,6 +1,6 @@
 use std::fs::{self, OpenOptions};
 use std::io::Write;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use crate::error::application_error::ApplicationError;
 use crate::filesystem::file_system::FileSystem;
@@ -53,6 +53,25 @@ impl FileSystem for LocalFileSystem {
         fs::read(path).map_err(|error| Self::map_error("read file", path, error))
     }
 
+    fn read_directory(&self, path: &Path) -> Result<Vec<PathBuf>, ApplicationError> {
+        let entries =
+            fs::read_dir(path).map_err(|error| Self::map_error("read directory", path, error))?;
+
+        entries
+            .map(|entry| {
+                entry
+                    .map(|entry| entry.path())
+                    .map_err(|error| Self::map_error("read directory entry", path, error))
+            })
+            .collect()
+    }
+
+    fn file_size(&self, path: &Path) -> Result<u64, ApplicationError> {
+        fs::metadata(path)
+            .map(|metadata| metadata.len())
+            .map_err(|error| Self::map_error("read file metadata", path, error))
+    }
+
     fn delete(&self, path: &Path) -> Result<(), ApplicationError> {
         if path.is_dir() {
             fs::remove_dir_all(path)
@@ -64,5 +83,9 @@ impl FileSystem for LocalFileSystem {
 
     fn exists(&self, path: &Path) -> bool {
         path.exists()
+    }
+
+    fn is_directory(&self, path: &Path) -> bool {
+        path.is_dir()
     }
 }

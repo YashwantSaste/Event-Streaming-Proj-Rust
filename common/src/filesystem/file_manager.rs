@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use crate::error::application_error::ApplicationError;
 use crate::filesystem::file_system::FileSystem;
@@ -43,6 +43,16 @@ impl FileManager {
         LocalFileSystem::new().read_file(path.as_ref())
     }
 
+    /// Returns immediate child paths for a directory.
+    pub fn read_directory(path: impl AsRef<Path>) -> Result<Vec<PathBuf>, ApplicationError> {
+        LocalFileSystem::new().read_directory(path.as_ref())
+    }
+
+    /// Returns the current size of a file in bytes.
+    pub fn file_size(path: impl AsRef<Path>) -> Result<u64, ApplicationError> {
+        LocalFileSystem::new().file_size(path.as_ref())
+    }
+
     /// Deletes a file or directory tree.
     pub fn delete(path: impl AsRef<Path>) -> Result<(), ApplicationError> {
         LocalFileSystem::new().delete(path.as_ref())
@@ -51,5 +61,10 @@ impl FileManager {
     /// Returns true when the path exists.
     pub fn exists(path: impl AsRef<Path>) -> bool {
         LocalFileSystem::new().exists(path.as_ref())
+    }
+
+    /// Returns true when the path exists and is a directory.
+    pub fn is_directory(path: impl AsRef<Path>) -> bool {
+        LocalFileSystem::new().is_directory(path.as_ref())
     }
 }
