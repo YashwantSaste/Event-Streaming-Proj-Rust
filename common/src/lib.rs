@@ -7,3 +7,4 @@ pub mod constants;
 pub mod error;
 pub mod filesystem;
 pub mod logging;
+pub mod models;

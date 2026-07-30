@@ -2,7 +2,6 @@ use crate::base::base_command::BaseCommand;
 use crate::base::cli_error::CliError;
 use crate::base::parsed_command::ParsedCommand;
 use crate::command::init_workspace::InitCommand;
-use std::path::PathBuf;
 
 pub struct CommandFactory;
 

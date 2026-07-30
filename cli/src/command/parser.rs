@@ -1,4 +1,3 @@
-use crate::base::base_command::BaseCommand;
 use crate::base::cli_error::CliError;
 use crate::base::parsed_command::ParsedCommand;
 use std::collections::HashMap;
