@@ -46,8 +46,9 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut client = ConsumerClient::new(configuration);
     client.subscribe(topic)?;
     let records = client.poll(partition, offset, max_records).await?;
+    let next_offset = records.last().map(|record| record.offset().next());
 
-    for record in records {
+    for record in &records {
         println!(
             "{}:{}:{} {}",
             record.topic(),
@@ -55,6 +56,13 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
             record.offset(),
             String::from_utf8_lossy(record.payload().bytes())
         );
+    }
+
+    if options.get("commit").map(String::as_str) == Some("true") {
+        if let Some(next_offset) = next_offset {
+            let committed = client.commit(topic, partition, next_offset.value()).await?;
+            println!("Committed offset {committed}");
+        }
     }
     Ok(())
 }

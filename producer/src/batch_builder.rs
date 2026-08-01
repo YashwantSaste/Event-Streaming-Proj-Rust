@@ -1,7 +1,7 @@
 use common::error::producer_error::ProducerError;
 use common::models::identifiers::{PartitionId, TopicName};
 use common::models::record::{RecordKey, RecordPayload};
-use common::protocol::request::{ProduceRequest, Request, RequestPayload};
+use common::protocol::request::{CreateTopicRequest, ProduceRequest, Request, RequestPayload};
 
 #[derive(Debug, Default)]
 pub struct BatchBuilder {
@@ -35,5 +35,31 @@ impl BatchBuilder {
         );
         self.next_correlation_id = self.next_correlation_id.saturating_add(1);
         Ok(request)
+    }
+
+    pub fn build_create_topic_request(
+        &mut self,
+        topic: &str,
+        partition_count: u32,
+        segment_max_bytes: u64,
+    ) -> Result<Request, ProducerError> {
+        let topic = TopicName::new(topic.to_string())
+            .map_err(|error| ProducerError::new(error.to_string()))?;
+        let request = Request::new(
+            self.next_correlation_id,
+            RequestPayload::CreateTopic(CreateTopicRequest::new(
+                topic,
+                partition_count,
+                segment_max_bytes,
+            )),
+        );
+        self.next_correlation_id = self.next_correlation_id.saturating_add(1);
+        Ok(request)
+    }
+
+    pub fn build_list_topics_request(&mut self) -> Request {
+        let request = Request::new(self.next_correlation_id, RequestPayload::ListTopics);
+        self.next_correlation_id = self.next_correlation_id.saturating_add(1);
+        request
     }
 }
