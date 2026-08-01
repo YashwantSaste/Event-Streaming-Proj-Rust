@@ -5,6 +5,7 @@ port = 9092
 [storage]
 data_directory = "data/broker"
 topics_directory = "data/topics"
+consumer_group_directory = "data/consumer-groups"
 segment_max_bytes = 1048576
 
 [network]

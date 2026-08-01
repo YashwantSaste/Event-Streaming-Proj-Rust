@@ -9,6 +9,7 @@ pub struct BrokerConfiguration {
     bind_address: SocketAddr,
     storage_root_directory: PathBuf,
     topic_metadata_directory: PathBuf,
+    consumer_group_directory: PathBuf,
     segment_max_bytes: u64,
     max_frame_bytes: usize,
 }
@@ -23,6 +24,9 @@ impl BrokerConfiguration {
             PathBuf::from(configuration.get_or("storage.data_directory", "data/broker"));
         let topic_metadata_directory =
             PathBuf::from(configuration.get_or("storage.topics_directory", "data/topics"));
+        let consumer_group_directory = PathBuf::from(
+            configuration.get_or("storage.consumer_group_directory", "data/consumer-groups"),
+        );
         let segment_max_bytes = Self::parse_u64(
             configuration.get_or("storage.segment_max_bytes", "1048576"),
             "storage.segment_max_bytes",
@@ -36,6 +40,7 @@ impl BrokerConfiguration {
             bind_address,
             storage_root_directory,
             topic_metadata_directory,
+            consumer_group_directory,
             segment_max_bytes,
             max_frame_bytes,
         })
@@ -51,6 +56,10 @@ impl BrokerConfiguration {
 
     pub fn topic_metadata_directory(&self) -> &Path {
         &self.topic_metadata_directory
+    }
+
+    pub fn consumer_group_directory(&self) -> &Path {
+        &self.consumer_group_directory
     }
 
     pub fn segment_max_bytes(&self) -> u64 {

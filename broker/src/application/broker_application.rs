@@ -3,6 +3,8 @@ use common::filesystem::local_file_system::LocalFileSystem;
 
 use crate::application::broker_configuration::BrokerConfiguration;
 use crate::application::broker_runtime::BrokerRuntime;
+use crate::consumer_group::consumer_group_manager::ConsumerGroupManager;
+use crate::consumer_group::offset_store::OffsetStore;
 use crate::network::broker_server::BrokerServer;
 use crate::network::server_configuration::BrokerServerConfiguration;
 use crate::partition::partition_manager::PartitionManager;
@@ -34,7 +36,14 @@ impl BrokerApplication {
         let storage_engine = LocalStorageEngine::new(LocalFileSystem::new(), storage_configuration);
         let partition_manager = PartitionManager::new(storage_engine);
 
-        let mut runtime = BrokerRuntime::new(topic_manager, partition_manager);
+        let offset_store = OffsetStore::new(
+            LocalFileSystem::new(),
+            self.configuration.consumer_group_directory().to_path_buf(),
+        );
+        let consumer_group_manager = ConsumerGroupManager::new(offset_store);
+
+        let mut runtime =
+            BrokerRuntime::new(topic_manager, partition_manager, consumer_group_manager);
         runtime.recover()?;
 
         let server_configuration = BrokerServerConfiguration::new(
