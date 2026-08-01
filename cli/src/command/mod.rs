@@ -1,5 +1,10 @@
 pub mod command_factory;
+pub mod command_utils;
+pub mod consume_command;
+pub mod create_topic_command;
 pub mod dispatcher;
 pub mod init_workspace;
+pub mod list_topics_command;
 pub mod parser;
-pub mod runtime_commands;
+pub mod produce_command;
+pub mod start_broker_command;

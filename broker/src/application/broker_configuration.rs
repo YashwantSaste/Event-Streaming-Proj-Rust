@@ -16,14 +16,25 @@ pub struct BrokerConfiguration {
 
 impl BrokerConfiguration {
     pub fn from_configuration(configuration: &Configuration) -> Result<Self, BrokerError> {
+        Self::from_configuration_with_base_dir(configuration, Path::new("."))
+    }
+
+    pub fn from_configuration_with_base_dir(
+        configuration: &Configuration,
+        base_dir: &Path,
+    ) -> Result<Self, BrokerError> {
         let host = configuration.get_or("broker.host", "127.0.0.1");
         let port = Self::parse_u16(configuration.get_or("broker.port", "9092"), "broker.port")?;
         let bind_address = SocketAddr::new(Self::parse_ip_address(host)?, port);
 
-        let storage_root_directory =
-            PathBuf::from(configuration.get_or("storage.data_directory", "data/broker"));
-        let topic_metadata_directory =
-            PathBuf::from(configuration.get_or("storage.topics_directory", "data/topics"));
+        let storage_root_directory = Self::resolve_path(
+            base_dir,
+            configuration.get_or("storage.data_directory", "data/broker"),
+        );
+        let topic_metadata_directory = Self::resolve_path(
+            base_dir,
+            configuration.get_or("storage.topics_directory", "data/topics"),
+        );
         let consumer_group_directory = PathBuf::from(
             configuration.get_or("storage.consumer_group_directory", "data/consumer-groups"),
         );
@@ -40,7 +51,10 @@ impl BrokerConfiguration {
             bind_address,
             storage_root_directory,
             topic_metadata_directory,
-            consumer_group_directory,
+            consumer_group_directory: Self::resolve_path(
+                base_dir,
+                consumer_group_directory.to_string_lossy().as_ref(),
+            ),
             segment_max_bytes,
             max_frame_bytes,
         })
@@ -92,5 +106,14 @@ impl BrokerConfiguration {
         value
             .parse::<usize>()
             .map_err(|error| BrokerError::new(format!("Invalid {key} '{value}': {error}")))
+    }
+
+    fn resolve_path(base_dir: &Path, value: &str) -> PathBuf {
+        let path = PathBuf::from(value);
+        if path.is_absolute() {
+            path
+        } else {
+            base_dir.join(path)
+        }
     }
 }

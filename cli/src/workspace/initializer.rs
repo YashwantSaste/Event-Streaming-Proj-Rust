@@ -35,6 +35,14 @@ impl WorkspaceInitializer {
         Directory::create(&workspace)?;
         self.template_generator.generate(&workspace)?;
 
+        // Set the active workspace
+        if let Some(home) = dirs::home_dir() {
+            let active_ws_file = home.join(".es_workspace");
+            if let Err(e) = std::fs::write(&active_ws_file, workspace.root().display().to_string()) {
+                eprintln!("Warning: Failed to set active workspace: {}", e);
+            }
+        }
+
         Ok(CommandResult {
             success: true,
             exit_code: 0,

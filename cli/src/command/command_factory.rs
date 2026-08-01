@@ -1,10 +1,12 @@
 use crate::base::base_command::BaseCommand;
 use crate::base::cli_error::CliError;
 use crate::base::parsed_command::ParsedCommand;
+use crate::command::consume_command::ConsumeCommand;
+use crate::command::create_topic_command::CreateTopicCommand;
 use crate::command::init_workspace::InitCommand;
-use crate::command::runtime_commands::{
-    ConsumeCommand, CreateTopicCommand, ListTopicsCommand, ProduceCommand, StartBrokerCommand,
-};
+use crate::command::list_topics_command::ListTopicsCommand;
+use crate::command::produce_command::ProduceCommand;
+use crate::command::start_broker_command::StartBrokerCommand;
 
 pub struct CommandFactory;
 

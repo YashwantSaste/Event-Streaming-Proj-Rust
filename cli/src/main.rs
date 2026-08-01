@@ -18,6 +18,8 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let parsed_command = CommandParser::parse()?;
     let command = CommandFactory::create(parsed_command)?;
     let result = CommandDispatcher::dispatch(command)?;
-    println!("{}", result.message);
+    if !result.message.is_empty() {
+        println!("{}", result.message);
+    }
     Ok(())
 }

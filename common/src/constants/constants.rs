@@ -6,6 +6,7 @@ pub const TEMP: &str = "temp";
 
 pub const BROKER_DATA: &str = "broker";
 pub const TOPICS: &str = "topics";
+pub const CONSUMER_GROUPS: &str = "consumer-groups";
 pub const BROKER_DIRECTORY: &str = "broker";
 pub const TOPIC_DIRECTORY: &str = "topics";
 

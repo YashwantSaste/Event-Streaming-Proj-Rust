@@ -18,6 +18,7 @@ impl Directory {
             root.join(DATA),
             root.join(DATA).join(BROKER_DATA),
             root.join(DATA).join(TOPICS),
+            root.join(DATA).join(CONSUMER_GROUPS),
             root.join(LOGS),
             root.join(PLUGINS),
             root.join(TEMP),
